@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="utf-8"><title>TaskTrack</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--g:#5b4bdb;--gl:#ecebff;--bg:#f5f4fc;--cd:#fff;--tx:#1d1b3a;--mu:#6e6c8f;--bd:#e5e3f3;--rd:#d93a52;--rl:#ffe9ed;--am:#c26a05;--al:#fff1db}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){color-scheme:dark;--g:#8c82ff;--gl:#27244d;--bg:#12112a;--cd:#1b1a38;--tx:#ecebff;--mu:#a2a0c8;--bd:#2c2a52;--rd:#ff7b8f;--rl:#3d1c28;--am:#f0b25a;--al:#3b2d14}}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+#app{max-width:430px;margin:0 auto;min-height:100vh;position:relative;padding:16px 16px 90px}
+h1{font-size:24px;margin:4px 0 2px}h2{font-size:16px;margin:18px 0 8px}p{margin:0}
+.mu{color:var(--mu);font-size:13px}.row{display:flex;align-items:center;gap:8px}.sp{justify-content:space-between}
+.card{background:var(--cd);border:1px solid var(--bd);border-radius:16px;padding:14px;margin:10px 0}
+.hero{background:var(--g);color:#fff;border:0}.hero .mu{color:#d4eadf}
+.bar{height:8px;background:rgba(255,255,255,.3);border-radius:9px;margin-top:10px;overflow:hidden}.bar i{display:block;height:100%;background:#fff}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.grid3 .card{margin:0;text-align:center}.grid3 b{font-size:22px;display:block}
+.alert{background:var(--rl);color:var(--rd);border-color:transparent;font-weight:600}
+.badge{display:inline-block;font-size:11px;font-weight:600;border-radius:99px;padding:2px 9px;background:var(--gl);color:var(--g)}
+.badge.t{background:var(--rl);color:var(--rd)}.badge.s{background:var(--al);color:var(--am)}.badge.r{background:var(--bd);color:var(--mu)}
+.btn{display:block;width:100%;border:0;border-radius:12px;padding:13px;font:600 15px inherit;font-family:inherit;background:var(--g);color:#fff;cursor:pointer;margin:8px 0;text-align:center}
+.btn.o{background:transparent;color:var(--g);border:1.5px solid var(--g)}.btn.d{background:var(--rd);color:#fff}.btn.dis{opacity:.45}
+.inp,select,textarea{width:100%;border:1px solid var(--bd);background:var(--cd);color:var(--tx);border-radius:12px;padding:11px 12px;font:inherit;margin:4px 0 10px}
+label{font-size:13px;font-weight:600}.err{color:var(--rd);font-size:12px;margin:-6px 0 8px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin:4px 0 10px}.chip{border:1px solid var(--bd);background:var(--cd);color:var(--tx);border-radius:99px;padding:7px 14px;font:inherit;font-size:13px;cursor:pointer}.chip.on{background:var(--g);border-color:var(--g);color:#fff}
+.nav{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:100%;max-width:430px;background:var(--cd);border-top:1px solid var(--bd);display:flex;padding:8px 0 calc(8px + env(safe-area-inset-bottom,0px))}
+.nav button{flex:1;background:none;border:0;color:var(--mu);font:inherit;font-size:11px;cursor:pointer}.nav button.on{color:var(--g);font-weight:700}.nav span{display:block;font-size:20px}
+.back{background:none;border:0;color:var(--g);font:600 14px inherit;font-family:inherit;padding:4px 0;cursor:pointer}
+.task{cursor:pointer}.task b{display:block;margin:4px 0 2px}
+.mod{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;padding:20px;z-index:20}.mod>div{background:var(--cd);border-radius:20px;padding:20px;width:100%;max-width:380px;max-height:90vh;overflow:auto}
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:var(--tx);color:var(--bg);padding:10px 16px;border-radius:99px;font-size:13px;z-index:30}
+.ch{display:flex;align-items:flex-end;gap:6px;height:90px;margin-top:8px}.ch div{flex:1;text-align:center;font-size:10px;color:var(--mu)}.ch i{display:block;background:var(--g);border-radius:4px 4px 0 0;min-height:3px;margin-bottom:2px}
+.hero{background:linear-gradient(135deg,#5b4bdb,#b04bd6 60%,#f0647a)}.hero .mu{color:rgba(255,255,255,.85)}
+.btn:not(.o):not(.d){background:linear-gradient(135deg,var(--g),#a23fd0);color:#fff}.chip.on{background:linear-gradient(135deg,var(--g),#a23fd0);border-color:transparent}
+.grid3 .card:nth-child(1){background:rgba(245,158,11,.14);color:#d97706;border:0}.grid3 .card:nth-child(2){background:rgba(47,125,225,.14);color:#2f7de1;border:0}.grid3 .card:nth-child(3){background:rgba(15,155,115,.14);color:#0f9b73;border:0}.grid3 .card .mu{color:inherit;opacity:.85}
+.badge.k{background:rgba(15,155,115,.15);color:#0f9b73}.ch i{background:linear-gradient(var(--g),#c04bd6)}
+.lgw{position:fixed;inset:0;max-width:none!important;display:flex;align-items:center;justify-content:center;padding:20px;background:linear-gradient(135deg,#5b4bdb,#b04bd6 55%,#f0647a);overflow:auto;z-index:40}.lgc{background:var(--cd);border-radius:24px;padding:28px 24px;width:100%;max-width:380px;box-shadow:0 20px 50px rgba(0,0,0,.25)}.logo{width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,#5b4bdb,#f0647a);color:#fff;display:flex;align-items:center;justify-content:center;font-size:28px;margin-bottom:14px}
+.sw{width:44px;height:26px;border-radius:99px;background:var(--g);position:relative}.sw:after{content:"";position:absolute;right:3px;top:3px;width:20px;height:20px;border-radius:50%;background:#fff}
+@media(min-width:860px){#app{max-width:none;margin:0 0 0 240px;padding:36px 48px 60px}#app>*:not(.mod):not(.toast):not(.nav){max-width:920px}
+.nav{left:0;top:0;bottom:0;transform:none;width:240px;max-width:none;flex-direction:column;justify-content:flex-start;gap:4px;padding:24px 14px;border-top:0;border-right:1px solid var(--bd)}
+.nav:before{content:"TaskTrack";font:700 22px system-ui,sans-serif;color:var(--g);padding:0 12px 18px}
+.nav button{flex:none;display:flex;align-items:center;gap:12px;text-align:left;padding:12px;border-radius:12px;font-size:15px}.nav button.on{background:var(--gl)}.nav span{display:inline;font-size:18px}
+#list{display:grid;grid-template-columns:repeat(2,1fr);gap:0 14px}#list>p,#list>.card:not(.task){grid-column:1/-1}
+.inp,select,textarea{max-width:560px}.btn{max-width:360px}.toast{bottom:30px}h1{font-size:28px}}
+</style></head><body><div id="app"></div>
+<script>
+const $=s=>document.querySelector(s),MON=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'],MONL=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'],DAY=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+const p2=n=>String(n).padStart(2,'0'),tm=d=>p2(d.getHours())+'.'+p2(d.getMinutes()),H=36e5,D=864e5;
+const fs=ms=>{const d=new Date(ms);return d.getDate()+' '+MON[d.getMonth()]+' · '+tm(d)};
+const fl=ms=>{const d=new Date(ms);return d.getDate()+' '+MONL[d.getMonth()]+' '+d.getFullYear()+' · '+tm(d)};
+const esc=s=>String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const ST=['Belum Dikerjakan','Sedang Dikerjakan','Selesai'],PR=['Tinggi','Sedang','Rendah'],REM={15:'15 menit sebelum tenggat',60:'1 jam sebelum tenggat',180:'3 jam sebelum tenggat',1440:'1 hari sebelum tenggat'};
+function seed(){const t=new Date();t.setHours(10,0,0,0);const b=t.getTime(),x=(id,t,cat,pri,due,st,o)=>({id,t,desc:'',cat,pri,due,st,proj:'',by:'',rem:60,created:b-5*D,done:null,...o});
+return{cats:['Proyek','Rapat','Administrasi'],lastBackup:null,tasks:[
+x(1,'Selesaikan Modul Laporan Penjualan','Proyek','Tinggi',b-3*D+7*H,'Selesai',{proj:'Dashboard Penjualan',done:b-3*D+5*H}),
+x(2,'Presentasi Sprint Review','Rapat','Sedang',b-D-H,'Belum Dikerjakan',{proj:'TaskTrack'}),
+x(3,'Finalisasi SRS TaskTrack','Proyek','Tinggi',b+D+7*H,'Sedang Dikerjakan',{desc:'Revisi akhir dokumen SRS',proj:'TaskTrack',by:'Pak Budi (Atasan)',rem:180}),
+x(4,'Rekap Absensi Bulanan','Administrasi','Rendah',b+8*D,'Belum Dikerjakan',{rem:1440})]}}
+let S;try{S=JSON.parse(localStorage.getItem('tt2'))}catch(e){}if(!S||!S.tasks)S={cats:['Proyek','Rapat','Administrasi'],lastBackup:null,tasks:[]};
+const save=()=>{try{localStorage.setItem('tt2',JSON.stringify(S))}catch(e){}};
+const ui={auth:(()=>{try{return localStorage.getItem('ttA')==='1'}catch(e){return false}})(),le:'',lu:'',v:'beranda',id:null,tab:'Semua',q:'',f:{st:'',pr:'',cat:'',from:'',to:'',sort:'due'},form:null,errs:{},modal:'',rp:'Bulanan',rd:Date.now(),fmt:'PDF',cname:'',cerr:'',pend:null,bk:null,toast:''};
+const now=()=>Date.now(),late=t=>t.st!=='Selesai'&&t.due<now(),get=id=>S.tasks.find(t=>t.id==id);
+const go=(v,id)=>{ui.v=v;if(id!==undefined)ui.id=id;ui.errs={};ui.cerr='';R();scrollTo(0,0)};
+const toast=m=>{ui.toast=m;R();setTimeout(()=>{ui.toast='';R()},2000)};
+const bdg=t=>t.st==='Selesai'?'':(late(t)?'t':'s');
+const stB=t=>`<span class="badge ${t.st==='Selesai'?'k':t.st==='Sedang Dikerjakan'?'s':'r'}">${t.st}</span>`;
+function card(t){return`<div class="card task" onclick="go('detail',${t.id})"><div class="row sp"><span class="mu">${esc(t.cat)}${t.proj?' · '+esc(t.proj):''}</span><span class="badge ${t.pri==='Tinggi'?'t':t.pri==='Sedang'?'s':'r'}">${t.pri}</span></div><b>${esc(t.t)}</b><div class="row sp"><span class="mu" style="${late(t)?'color:var(--rd)':''}">${fs(t.due)}${late(t)?' · Terlambat':''}</span>${stB(t)}</div></div>`}
+function filtered(){let L=S.tasks.filter(t=>{const q=ui.q.toLowerCase(),f=ui.f;
+if(q&&!(t.t+' '+t.desc).toLowerCase().includes(q))return 0;
+if(ui.tab==='Aktif'&&t.st==='Selesai')return 0;if(ui.tab==='Selesai'&&t.st!=='Selesai')return 0;
+if(f.st&&t.st!==f.st)return 0;if(f.pr&&t.pri!==f.pr)return 0;if(f.cat&&t.cat!==f.cat)return 0;
+if(f.from&&t.due<new Date(f.from+'T00:00').getTime())return 0;if(f.to&&t.due>new Date(f.to+'T23:59').getTime())return 0;return 1});
+const f=ui.f.sort;L.sort((a,b)=>f==='pri'?PR.indexOf(a.pri)-PR.indexOf(b.pri):f==='new'?b.created-a.created:a.due-b.due);return L}
+const back=(to,l)=>`<button class="back" onclick="go('${to}')">‹ ${l||'Kembali'}</button>`;
+const vals=(o,k)=>Object.entries(o).map(([v,l])=>`<option value="${v}">${l}</option>`).join('');
+function V(){const T=S.tasks,done=T.filter(t=>t.st==='Selesai').length,pct=T.length?Math.round(done/T.length*100):0,od=T.filter(late),d0=new Date();
+switch(ui.v){
+case'beranda':{const cnt=s=>T.filter(t=>t.st===s).length,today=T.filter(t=>t.st!=='Selesai'&&new Date(t.due).toDateString()===d0.toDateString()).length;
+const fu=T.filter(t=>t.st!=='Selesai'&&(late(t)||t.due<now()+D)).sort((a,b)=>a.due-b.due);
+return`<p class="mu">TaskTrack</p><h1>Selamat ${d0.getHours()<11?'pagi':d0.getHours()<15?'siang':d0.getHours()<18?'sore':'malam'}.</h1><p class="mu">${DAY[d0.getDay()]}, ${d0.getDate()} ${MONL[d0.getMonth()]} ${d0.getFullYear()}</p>
+<div class="card hero"><div class="row sp"><b>Satu langkah lebih dekat.</b><b style="font-size:26px">${pct}%</b></div><p class="mu">${done} dari ${T.length} tugas sudah selesai</p><div class="bar"><i style="width:${pct}%"></i></div></div>
+<div class="grid3"><div class="card"><b>${cnt(ST[0])}</b><span class="mu">Belum Dikerjakan</span></div><div class="card"><b>${cnt(ST[1])}</b><span class="mu">Sedang Dikerjakan</span></div><div class="card"><b>${cnt(ST[2])}</b><span class="mu">Selesai</span></div></div>
+<div class="card ${od.length?'alert':''}">${od.length?od.length+' tugas terlambat':today?today+' tugas jatuh tempo hari ini':'Tidak ada tenggat hari ini'}</div>
+<div class="row sp"><h2>Perlu ditindaklanjuti</h2><button class="back" onclick="go('tugas')">Lihat semua</button></div>${fu.map(card).join('')||'<p class="mu">Semua beres.</p>'}`}
+case'tugas':{const c=s=>T.filter(t=>s==='Semua'||(s==='Aktif')===(t.st!=='Selesai')).length;
+return`<div class="row sp"><h1>Semua tugas</h1><button class="chip" onclick="newForm()">＋</button></div>
+<div class="row"><input class="inp" style="margin:4px 0" placeholder="Cari judul atau deskripsi" value="${esc(ui.q)}" oninput="ui.q=this.value;$('#list').innerHTML=list()"><button class="chip" onclick="go('filter')">Filter</button></div>
+<div class="chips" style="margin-top:10px">${['Semua','Aktif','Selesai'].map(s=>`<button class="chip ${ui.tab===s?'on':''}" onclick="ui.tab='${s}';R()">${s} ${c(s)}</button>`).join('')}</div><div id="list">${list()}</div>`}
+case'detail':{const t=get(ui.id);if(!t)return go('tugas'),'';const dn=t.st==='Selesai';
+const r=(a,b)=>`<div class="row sp" style="padding:8px 0;border-bottom:1px solid var(--bd)"><span class="mu">${a}</span><span style="text-align:right">${b}</span></div>`;
+return`${back('tugas','Detail tugas')}${dn?`<div class="card" style="background:var(--gl)"><b>Tugas berhasil diselesaikan</b><p class="mu">Selesai ${fl(t.done||now())}. Waktu tercatat otomatis. Pengingat dihentikan.</p></div>`:''}
+<span class="badge ${t.pri==='Tinggi'?'t':'s'}">Prioritas ${t.pri.toLowerCase()}</span><h1>${esc(t.t)}</h1>${stB(t)}
+<div class="card">${r('Deskripsi',esc(t.desc)||'-')}${r('Tenggat',fl(t.due))}${r('Kategori',esc(t.cat))}${r('Proyek',esc(t.proj)||'-')}${r('Pemberi tugas',esc(t.by)||'-')}${r('Pengingat',dn?'Nonaktif · tugas selesai':REM[t.rem])}${r('Dibuat',fl(t.created))}</div>
+<div class="row"><button class="btn o" onclick="editForm(${t.id})">Edit tugas</button><button class="btn o" style="color:var(--rd);border-color:var(--rd)" onclick="ui.modal='del';R()">Hapus</button></div>
+${dn?`<button class="btn" onclick="go('tugas')">Kembali ke daftar tugas</button>`:`<button class="btn" onclick="finish(${t.id})">Tandai selesai</button>`}`}
+case'form':{const f=ui.form,e=ui.errs,ed=f.id;const er=k=>e[k]?`<p class="err">${e[k]}</p>`:'';
+return`${back(ed?'detail':'tugas','Batal')}<h1>${ed?'Edit tugas':'Tambah tugas'}</h1><p class="mu">${ed?'Perbarui detail dan jadwal pekerjaan.':'Rencanakan pekerjaan berikutnya.'}</p><br>
+<label>Judul tugas *</label><input class="inp" placeholder="Masukkan judul tugas" value="${esc(f.t)}" oninput="ui.form.t=this.value">${er('t')}
+<label>Deskripsi</label><textarea class="inp" rows="2" placeholder="Apa yang perlu dikerjakan?" oninput="ui.form.desc=this.value">${esc(f.desc)}</textarea>
+<label>Kategori *</label><select onchange="ui.form.cat=this.value"><option value="">Pilih kategori</option>${S.cats.map(c=>`<option ${f.cat===c?'selected':''}>${esc(c)}</option>`).join('')}</select>${er('cat')}
+<label>Prioritas</label><div class="chips">${PR.map(p=>`<button class="chip ${f.pri===p?'on':''}" onclick="ui.form.pri='${p}';R()">${p}</button>`).join('')}</div>
+<label>Tenggat *</label><input class="inp" type="datetime-local" value="${f.due}" onchange="ui.form.due=this.value">${er('due')}
+<label>Proyek · opsional</label><input class="inp" placeholder="Nama proyek" value="${esc(f.proj)}" oninput="ui.form.proj=this.value">
+<label>Pemberi tugas · opsional</label><input class="inp" placeholder="Nama atasan atau klien" value="${esc(f.by)}" oninput="ui.form.by=this.value">
+<label>Status</label><select onchange="ui.form.st=this.value">${ST.map(s=>`<option ${f.st===s?'selected':''}>${s}</option>`).join('')}</select>
+<label>Pengingat</label><select onchange="ui.form.rem=+this.value">${Object.entries(REM).map(([k,l])=>`<option value="${k}" ${f.rem==k?'selected':''}>${l}</option>`).join('')}</select>
+<p class="mu">* Wajib diisi. Tenggat tidak boleh sebelum waktu pembuatan tugas.${ed?' Perubahan tenggat akan memperbarui jadwal pengingat.':''}</p><button class="btn" onclick="saveForm()">${ed?'Simpan perubahan':'Simpan tugas'}</button>`}
+case'filter':{const f=ui.f;return`${back('tugas','Batal')}<h1>Filter &amp; urutkan</h1><p class="mu">Temukan tugas yang ingin Anda fokuskan.</p><br>
+<label>Status</label><select onchange="ui.f.st=this.value"><option value="">Semua status</option>${ST.map(s=>`<option ${f.st===s?'selected':''}>${s}</option>`).join('')}</select>
+<label>Prioritas</label><div class="chips">${['',...PR].map(p=>`<button class="chip ${f.pr===p?'on':''}" onclick="ui.f.pr='${p}';R()">${p||'Semua'}</button>`).join('')}</div>
+<label>Kategori</label><select onchange="ui.f.cat=this.value"><option value="">Semua kategori</option>${S.cats.map(c=>`<option ${f.cat===c?'selected':''}>${esc(c)}</option>`).join('')}</select>
+<div class="row"><div style="flex:1"><label>Dari tanggal</label><input class="inp" type="date" value="${f.from}" onchange="ui.f.from=this.value"></div><div style="flex:1"><label>Sampai tanggal</label><input class="inp" type="date" value="${f.to}" onchange="ui.f.to=this.value"></div></div>
+<label>Urutkan berdasarkan</label><div class="chips">${[['due','Tenggat terdekat'],['pri','Prioritas tertinggi'],['new','Tanggal pembuatan terbaru']].map(([k,l])=>`<button class="chip ${f.sort===k?'on':''}" onclick="ui.f.sort='${k}';R()">${l}</button>`).join('')}</div>
+<button class="btn o" onclick="ui.f={st:'',pr:'',cat:'',from:'',to:'',sort:'due'};R()">Reset semua filter</button><button class="btn" onclick="go('tugas')">Terapkan filter</button>`}
+case'kategori':return`${back('pengaturan','Pengaturan')}<h1>Pekerjaan rapi, fokus lebih terarah.</h1><p class="mu">${S.cats.length} kategori untuk ${T.length} tugas Anda.</p><br>
+${S.cats.map((c,i)=>`<div class="card task row sp" onclick="ui.cname=S.cats[${i}];ui.id=${i};go('kelola')"><div><b>${esc(c)}</b><span class="mu">${T.filter(t=>t.cat===c).length} tugas</span></div><span class="mu">✎</span></div>`).join('')}
+<div class="card" style="background:var(--al);color:var(--am)"><b>Kategori yang sedang dipakai tidak dapat dihapus.</b><p style="font-size:13px">Pindahkan atau hapus tugas terkait terlebih dahulu.</p></div><button class="btn" onclick="ui.cname='';go('tambahkat')">Tambah kategori</button>`;
+case'kelola':{const c=S.cats[ui.id],u=T.filter(t=>t.cat===c);return`${back('kategori','Kategori')}<p class="mu">EDIT KATEGORI</p><h1>${esc(c)}</h1><label>Nama kategori *</label><input class="inp" value="${esc(ui.cname)}" oninput="ui.cname=this.value">${ui.cerr?`<p class="err">${ui.cerr}</p>`:'<p class="mu">Nama kategori tidak boleh kosong atau sama dengan kategori lain.</p>'}
+<button class="btn" onclick="renameCat()">Simpan nama kategori</button><h2>Dipakai pada ${u.length} tugas</h2>${u.map(t=>`<div class="card">${esc(t.t)}</div>`).join('')}
+${u.length?`<div class="card" style="background:var(--al);color:var(--am)"><b>Kategori masih digunakan</b><p style="font-size:13px">Pindahkan ${u.length} tugas di atas ke kategori lain sebelum menghapus ${esc(c)}.</p></div>`:''}<button class="btn d ${u.length?'dis':''}" onclick="delCat()">Hapus kategori</button>`}
+case'tambahkat':return`${back('kategori','Batal')}<h1>Beri ruang untuk pekerjaan Anda.</h1><p class="mu">Kelompokkan tugas agar lebih mudah ditemukan dan dievaluasi.</p><br><label>Nama kategori *</label><input class="inp" placeholder="Contoh: Laporan" value="${esc(ui.cname)}" oninput="ui.cname=this.value">${ui.cerr?`<p class="err">${ui.cerr}</p>`:'<p class="mu">Nama harus unik dan tidak boleh kosong.</p>'}
+<div class="card" style="background:var(--gl)"><b>Satu kategori, banyak tugas</b><p class="mu">Setelah disimpan, kategori tersedia saat Anda membuat atau mengedit tugas.</p></div><button class="btn" onclick="addCat()">Simpan kategori</button>`;
+case'pengingat':{const A=T.filter(t=>t.st!=='Selesai'&&!t.mute).sort((a,b)=>a.due-b.due);return`<h1>Jangan lewatkan yang penting.</h1><p class="mu">${A.length} pengingat aktif</p>
+${od.length?`<div class="card alert">${od.length} tugas terlambat</div>`:''}${A.map(t=>`<div class="card task" onclick="go('detail',${t.id})">${late(t)?`<span class="badge t">Terlambat ${fs(t.due)}</span>`:`<span class="badge">${fs(t.due-t.rem*6e4)}</span>`}${t.snooze>now()?` <span class="badge r">Ditunda sampai ${tm(new Date(t.snooze))}</span>`:''}<b>${esc(t.t)}</b><span class="mu">${REM[t.rem]}</span></div>`).join('')||'<p class="mu">Tidak ada pengingat.</p>'}
+<p class="mu">Pengingat tugas yang selesai otomatis dinonaktifkan. Pemeriksaan berjalan saat aplikasi dibuka.</p>`}
+case'laporan':{const r=ui.rd,d=new Date(r);let a,b,lb;
+if(ui.rp==='Harian'){a=new Date(d.getFullYear(),d.getMonth(),d.getDate());b=new Date(+a+D);lb=a.getDate()+' '+MONL[a.getMonth()]+' '+a.getFullYear()}
+else if(ui.rp==='Mingguan'){a=new Date(d.getFullYear(),d.getMonth(),d.getDate()-((d.getDay()+6)%7));b=new Date(+a+7*D);lb=a.getDate()+' '+MON[a.getMonth()]+' – '+new Date(+b-D).getDate()+' '+MON[new Date(+b-D).getMonth()]+' '+b.getFullYear()}
+else{a=new Date(d.getFullYear(),d.getMonth(),1);b=new Date(d.getFullYear(),d.getMonth()+1,1);lb=MONL[a.getMonth()]+' '+a.getFullYear()}
+const P=T.filter(t=>t.due>=a&&t.due<b),dn=P.filter(t=>t.st==='Selesai'),ns=P.length-dn.length,tl=P.filter(t=>t.st!=='Selesai'&&t.due<Math.min(b,now())).length,pc=P.length?Math.round(dn.length/P.length*100):0;
+const days=[...Array(7)].map((_,i)=>{const s=+new Date(b)-(7-i)*D;return{l:new Date(s).getDate(),n:T.filter(t=>t.st==='Selesai'&&t.done>=s&&t.done<s+D).length}}),mx=Math.max(1,...days.map(x=>x.n));
+return`<h1>Laporan</h1><div class="chips">${['Harian','Mingguan','Bulanan'].map(s=>`<button class="chip ${ui.rp===s?'on':''}" onclick="ui.rp='${s}';R()">${s}</button>`).join('')}</div>
+<div class="row sp"><button class="chip" onclick="shift(-1)">‹</button><b>${lb}</b><button class="chip" onclick="shift(1)">›</button></div>
+<div class="card"><p class="mu">Penyelesaian tugas</p><b style="font-size:30px;color:var(--g)">${pc}%</b> <span class="mu">${dn.length} dari ${P.length} tugas selesai pada periode ini</span><div class="bar" style="background:var(--bd)"><i style="width:${pc}%;background:var(--g)"></i></div></div>
+<div class="grid3"><div class="card"><b>${P.length}</b><span class="mu">Dibuat</span></div><div class="card"><b>${dn.length}</b><span class="mu">Selesai</span></div><div class="card"><b>${ns}</b><span class="mu">Belum selesai</span></div></div>
+<div class="card alert">Terlambat: ${tl} tugas</div>
+<div class="card"><b>Tugas selesai 7 hari terakhir</b><div class="ch">${days.map(x=>`<div><i style="height:${x.n/mx*70}px"></i>${x.l}</div>`).join('')}</div></div>
+<div class="card"><b>Kategori</b>${S.cats.map(c=>{const q=P.filter(t=>t.cat===c);return`<div class="row sp" style="padding:6px 0"><span>${esc(c)}</span><span class="mu">${q.filter(t=>t.st==='Selesai').length} / ${q.length} selesai</span></div>`}).join('')}</div>
+<p class="mu">Status dihitung hingga akhir periode terpilih.</p><button class="btn" onclick="ui.rl=lb;go('ekspor')">Ekspor laporan</button>`}
+case'ekspor':{const nm='TaskTrack_Laporan_'+(ui.rl||'').replace(' ','_')+'.'+ui.fmt.toLowerCase();return`${back('laporan','Laporan')}<h1>Simpan progres Anda.</h1><p class="mu">Arsipkan laporan ke penyimpanan perangkat.</p>
+<div class="card"><b>Laporan produktivitas</b><p class="mu">${esc(ui.rl)}</p><p>${T.length} dibuat · ${done} selesai · ${pct}% penyelesaian</p><span class="badge">Siap diekspor</span></div>
+<label>Format laporan</label><div class="chips">${[['PDF','Grafik dan tabel, siap dibaca'],['CSV','Data tabel untuk diolah kembali']].map(([k,l])=>`<button class="chip ${ui.fmt===k?'on':''}" onclick="ui.fmt='${k}';R()">${k} · ${l}</button>`).join('')}</div>
+<label>Nama berkas</label><div class="card">${esc(nm)}</div><button class="btn" onclick="doExport('${nm}')">Ekspor laporan</button>`}
+case'pengaturan':{const it=(v,a,b)=>`<div class="card task row sp" onclick="go('${v}')"><div><b>${a}</b><span class="mu">${b}</span></div><span class="mu">›</span></div>`;
+return`<h1>Milik Anda. Di perangkat Anda.</h1><p class="mu">Tanpa login, tanpa cloud. Semua tugas tersimpan secara lokal.</p><br><h2>Ruang kerja</h2>${it('kategori','Kelola kategori',S.cats.length+' kategori tugas')}${it('backup','Backup &amp; restore','Lindungi data dengan cadangan lokal')}
+<div class="card row sp"><div><b>Pengingat tenggat</b><span class="mu">Periksa setiap 1 menit saat app aktif</span></div><div class="sw"></div></div>${it('pengingat','Lihat pengingat','Daftar pengingat aktif')}
+<div class="card"><b>Panduan penggunaan</b><p class="mu">Tugas, pengingat, dan keamanan data</p></div><button class="btn d" onclick="logout()">Keluar</button><p class="mu" style="text-align:center">TaskTrack · Versi 1.0<br>Dirancang untuk pekerjaan yang lebih teratur.</p>`}
+case'backup':return`${back('pengaturan','Pengaturan')}<h1>Jaga pekerjaan tetap aman.</h1><p class="mu">Cadangkan tugas, kategori, dan pengaturan pengingat ke penyimpanan lokal.</p>
+<div class="card"><b>Backup data</b><p class="mu">Cadangan terakhir</p><p>${S.lastBackup?fl(S.lastBackup):'Belum ada'}</p><button class="btn" onclick="doBackup()">Buat cadangan</button></div>
+<div class="card"><b>Restore data</b><p class="mu">Pilih berkas cadangan TaskTrack (.db) dari perangkat Anda.</p><input type="file" id="rf" hidden accept=".db,.json" onchange="pickRestore(this.files[0])"><button class="btn o" onclick="$('#rf').click()">Pilih berkas cadangan</button>${ui.cerr?`<p class="err">${ui.cerr}</p>`:''}</div>
+<div class="card" style="background:var(--al);color:var(--am)"><b>Tidak ada cadangan otomatis di cloud.</b><p style="font-size:13px">Simpan salinan di lokasi yang aman. Restore akan mengganti data saat ini.</p></div>`;
+case'bkok':return`<div style="text-align:center;padding-top:30px"><div style="font-size:52px;color:var(--g)">✓</div><h1>Data Anda sudah dicadangkan.</h1><p class="mu">Semua tugas, kategori, dan pengaturan pengingat berhasil disimpan.</p></div><div class="card"><b>${esc(ui.bk)}</b><p class="mu">${fl(S.lastBackup)}<br>${T.length} tugas · ${S.cats.length} kategori</p></div><button class="btn" onclick="go('pengaturan')">Kembali ke pengaturan</button>`}}
+function list(){const L=filtered();return`<p class="mu">${L.length} tugas · ${{due:'Tenggat terdekat',pri:'Prioritas tertinggi',new:'Terbaru dibuat'}[ui.f.sort]}</p>`+(L.length?L.map(card).join(''):`<div class="card" style="text-align:center"><b>Tugas tidak ditemukan</b><p class="mu">Tidak ada judul atau deskripsi yang cocok${ui.q?' dengan '+esc(ui.q):''}. Coba kata kunci lain atau reset filter Anda.</p><button class="btn o" onclick="ui.q='';ui.tab='Semua';ui.f={st:'',pr:'',cat:'',from:'',to:'',sort:'due'};R()">Reset pencarian &amp; filter</button></div>`)}
+const iso=ms=>{const d=new Date(ms);return d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate())+'T'+p2(d.getHours())+':'+p2(d.getMinutes())};
+function newForm(){ui.form={t:'',desc:'',cat:'',pri:'Sedang',due:'',proj:'',by:'',st:ST[0],rem:60};go('form')}
+function editForm(id){const t=get(id);ui.form={...t,due:iso(t.due)};go('form')}
+function saveForm(){const f=ui.form,e={};if(!f.t.trim())e.t='Judul tugas wajib diisi.';if(!f.cat)e.cat='Pilih kategori.';if(!f.due)e.due='Tenggat wajib diisi.';
+else if(!f.id&&new Date(f.due).getTime()<now())e.due='Tenggat tidak boleh sebelum waktu pembuatan tugas.';
+ui.errs=e;if(Object.keys(e).length)return R();const o={...f,t:f.t.trim(),due:new Date(f.due).getTime()};
+if(f.id){Object.assign(get(f.id),o,{done:o.st==='Selesai'?(get(f.id).done||now()):null,snooze:0,mute:0});go('detail',f.id)}else{o.id=Date.now();o.created=now();o.done=o.st==='Selesai'?now():null;S.tasks.push(o);go('tugas')}save();toast('Tugas disimpan')}
+function finish(id){const t=get(id);t.st='Selesai';t.done=now();save();R()}
+function delTask(){S.tasks=S.tasks.filter(t=>t.id!=ui.id);ui.modal='';save();go('tugas');toast('Tugas dihapus')}
+function catErr(n,except){n=n.trim();return!n?'Nama kategori tidak boleh kosong.':S.cats.some((c,i)=>i!==except&&c.toLowerCase()===n.toLowerCase())?'Nama kategori sudah dipakai.':''}
+function addCat(){ui.cerr=catErr(ui.cname,-1);if(ui.cerr)return R();S.cats.push(ui.cname.trim());save();go('kategori');toast('Kategori ditambahkan')}
+function renameCat(){ui.cerr=catErr(ui.cname,ui.id);if(ui.cerr)return R();const o=S.cats[ui.id],n=ui.cname.trim();S.tasks.forEach(t=>{if(t.cat===o)t.cat=n});S.cats[ui.id]=n;save();go('kategori');toast('Nama diperbarui')}
+function delCat(){const c=S.cats[ui.id];if(S.tasks.some(t=>t.cat===c))return;S.cats.splice(ui.id,1);save();go('kategori');toast('Kategori dihapus')}
+function shift(n){const d=new Date(ui.rd);if(ui.rp==='Harian')d.setDate(d.getDate()+n);else if(ui.rp==='Mingguan')d.setDate(d.getDate()+7*n);else d.setMonth(d.getMonth()+n);ui.rd=+d;R()}
+function dl(name,txt,type){try{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([txt],{type}));a.download=name;a.click()}catch(e){}}
+function doExport(nm){const csv='Judul,Kategori,Prioritas,Tenggat,Status\n'+S.tasks.map(t=>[t.t,t.cat,t.pri,fl(t.due),t.st].map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(',')).join('\n');
+if(ui.fmt==='CSV'){dl(nm,csv,'text/csv');toast('Laporan diekspor')}else{try{print()}catch(e){}toast('Gunakan Simpan sebagai PDF')}}
+function doBackup(){S.lastBackup=now();ui.bk='tasktrack_'+new Date().toISOString().slice(0,10).replace(/-/g,'')+'.db';save();dl(ui.bk,JSON.stringify(S),'application/json');go('bkok')}
+function pickRestore(f){if(!f)return;const r=new FileReader();r.onload=()=>{try{const j=JSON.parse(r.result);if(!Array.isArray(j.tasks)||!Array.isArray(j.cats))throw 0;ui.pend=j;ui.bk=f.name;ui.cerr='';ui.modal='restore'}catch(e){ui.cerr='Berkas tidak valid atau rusak.'}R()};r.readAsText(f)}
+function M(){const m=ui.modal,n=S.tasks;
+if(m==='del')return`<h2>Hapus tugas ini?</h2><p class="mu">${esc(get(ui.id).t)} akan dihapus permanen. Pengingat terkait juga akan dibatalkan.</p><button class="btn o" onclick="ui.modal='';R()">Batal, simpan tugas</button><button class="btn d" onclick="delTask()">Ya, hapus tugas</button>`;
+if(m==='restore'){const j=ui.pend;return`<h2>Ganti data saat ini?</h2><p class="mu">Seluruh tugas, kategori, dan pengaturan saat ini akan diganti dengan isi cadangan.</p><div class="card"><b>${esc(ui.bk)}</b><p class="mu">${j.tasks.length} tugas · ${j.cats.length} kategori<br>✓ Format dan keutuhan berkas valid</p></div><label class="row"><input type="checkbox" id="ck"> Saya memahami data saat ini akan ditimpa.</label><p class="mu">Sebaiknya buat backup data saat ini terlebih dahulu.</p><button class="btn o" onclick="ui.modal='';R()">Batal</button><button class="btn d" onclick="if(!$('#ck').checked)return toast('Centang persetujuan dahulu');S=ui.pend;save();ui.modal='';go('beranda');toast('Data dipulihkan')">Ya, pulihkan data</button>`}
+if(m==='rem'){const t=get(ui.id),l=late(t),mn=Math.round(Math.abs(now()-t.due)/6e4),s=mn>=1440?Math.floor(mn/1440)+' hari '+Math.floor(mn%1440/60)+' jam':mn>=60?Math.floor(mn/60)+' jam '+mn%60+' menit':mn+' menit';
+return`<div class="card ${l?'alert':''}" style="margin-top:0"><b>${l?'Tenggat sudah lewat':'Tenggat mendekat'}</b></div><h2>${esc(t.t)}</h2><p>${l?'Terlambat '+s+'.':'Sisa '+s+'.'}</p><p class="mu">Tenggat: ${fl(t.due)}</p><p class="mu">${esc(t.cat)} · ${t.st}</p><br><label>Ingatkan saya lagi</label><div class="chips">${[15,30,60].map(x=>`<button class="chip ${(ui.sn||30)===x?'on':''}" onclick="ui.sn=${x};R()">${x===60?'1 jam':x+' menit'}</button>`).join('')}</div>
+<button class="btn" onclick="get(${t.id}).snooze=now()+(ui.sn||30)*6e4;ui.modal='';save();R()">Tunda ${ui.sn===60?'1 jam':(ui.sn||30)+' menit'}</button><button class="btn o" onclick="ui.modal='';go('detail',${t.id})">Buka tugas</button><button class="btn o" onclick="get(${t.id}).mute=1;ui.modal='';save();R()">Nonaktifkan pengingat tugas ini</button><p class="mu">Menunda pengingat tidak mengubah tenggat atau status tugas.</p>`}return''}
+function LG(){return`<div class='lgw'><div class='lgc'><div class='logo'>✓</div><h1>TaskTrack</h1><p class='mu'>Masuk untuk mengelola tugas Anda.</p><br><label>ID</label><input class='inp' id='lu' placeholder='Masukkan ID' autocomplete='username' value='${esc(ui.lu)}' onkeydown='if(event.keyCode==13)doLogin()'><label>Password</label><input class='inp' id='lp' type='password' placeholder='Masukkan password' autocomplete='current-password' onkeydown='if(event.keyCode==13)doLogin()'>${ui.le?`<p class='err'>${ui.le}</p>`:''}<button class='btn' onclick='doLogin()'>Masuk</button></div></div>`}
+function doLogin(){const u=$('#lu').value.trim(),p=$('#lp').value;ui.lu=u;if(u==='admin'&&p==='123'){ui.auth=true;ui.le='';ui.v='beranda';try{localStorage.setItem('ttA','1')}catch(e){}R()}else{ui.le='ID atau password salah.';R()}}
+function logout(){ui.auth=false;ui.lu='';ui.le='';try{localStorage.removeItem('ttA')}catch(e){}R()}
+function R(){if(!ui.auth){$('#app').innerHTML=LG();return}const nav=['beranda','tugas','laporan','pengaturan'],lb=['Beranda','Tugas','Laporan','Pengaturan'],ic=['⌂','☰','▤','⚙'],act={detail:'tugas',form:'tugas',filter:'tugas',kategori:'pengaturan',kelola:'pengaturan',tambahkat:'pengaturan',backup:'pengaturan',bkok:'pengaturan',pengingat:'pengaturan',ekspor:'laporan'}[ui.v]||ui.v;
+const y=scrollY;$('#app').innerHTML=V()+`<div class="nav">${nav.map((n,i)=>`<button class="${act===n?'on':''}" onclick="go('${n}')"><span>${ic[i]}</span>${lb[i]}</button>`).join('')}</div>`+(ui.modal?`<div class="mod"><div>${M()}</div></div>`:'')+(ui.toast?`<div class="toast">${ui.toast}</div>`:'');if(ui.v!==ui._pv)ui._pv=ui.v;else scrollTo(0,y)}
+function check(){if(ui.modal||!ui.auth)return;const t=S.tasks.find(t=>t.st!=='Selesai'&&!t.mute&&now()>=t.due-t.rem*6e4&&!(t.snooze>now())&&!t.seen);if(t){t.seen=1;ui.id=t.id;ui.modal='rem';R()}else if(S.tasks.some(t=>t.snooze&&t.snooze<=now()&&!t.mute&&t.st!=='Selesai')){S.tasks.forEach(t=>{if(t.snooze&&t.snooze<=now()){t.snooze=0;t.seen=0}})}}
+R();setTimeout(check,600);setInterval(check,6e4);
+</script></body></html>
